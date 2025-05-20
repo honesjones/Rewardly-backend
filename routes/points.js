@@ -64,6 +64,48 @@ router.get("/adbluemedia", async (req, res) => {
   }
 });
 
+// adbluemedia
+router.get("/cpagrip", async (req, res) => {
+  const { subid, payout, offer } = req.query;
+
+  if (!subid || !payout) {
+    return res.status(400).json({ message: "Missing s1 or payout" });
+  }
+
+  try {
+    // Lookup user by public_id
+    const userResult = await pool.query(
+      "SELECT id FROM users WHERE public_id = $1",
+      [subid]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userId = userResult.rows[0].id;
+    const points = Math.round(parseFloat(payout) * 0.4 * 1000); // Adjust conversion
+    const offerSource =" CpaGrip : " + offer; // Default to CPAGrip if not passed
+
+    // Insert into points table
+    const result = await pool.query(
+      "INSERT INTO points (user_id, source, point) VALUES ($1, $2, $3) RETURNING *",
+      [userId, offerSource, points]
+    );
+
+    // Update user's total points
+    await pool.query(
+      "UPDATE users SET points = points + $1 WHERE id = $2",
+      [points, userId]
+    );
+
+    res.status(200).json({ message: "Postback processed", data: result.rows[0] });
+  } catch (err) {
+    console.error("Postback error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 module.exports = router;
