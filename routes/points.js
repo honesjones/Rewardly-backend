@@ -11,7 +11,7 @@ router.get("/", verifyToken, async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT id, source, points, created_at FROM points WHERE user_id = $1 ORDER BY created_at DESC",
+      "SELECT id, source, point As points, created_at FROM points WHERE user_id = $1 ORDER BY created_at DESC",
       [userId]
     );
 
