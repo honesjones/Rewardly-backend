@@ -5,7 +5,7 @@ const verifyToken = require("../middlewares/auth");
 
 // POST /api/withdrawals
 router.post("/", verifyToken, async (req, res) => {
-  const { method, address, amount_points } = req.body;
+  const { method, address, amount_points ,ip} = req.body;
 
   if (!method || !address || !amount_points) {
     return res.status(400).json({ message: "All fields are required" });
@@ -24,9 +24,9 @@ router.post("/", verifyToken, async (req, res) => {
 
     // Insert withdrawal request
     const insertRes = await pool.query(
-      `INSERT INTO withdrawals (user_id, method, address, amount_points) 
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [req.user.id, method, address, amount_points]
+      `INSERT INTO withdrawals (user_id, method, address, amount_points,ip) 
+       VALUES ($1, $2, $3, $4,$5) RETURNING *`,
+      [req.user.id, method, address, amount_points,ip]
     );
 
     // Deduct points from user

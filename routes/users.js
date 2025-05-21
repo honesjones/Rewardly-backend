@@ -7,7 +7,7 @@ const verifyToken = require("../middlewares/auth");
 const generateUniquePublicId = require("../utils/generatePublicId");
 // POST /api/auth
 router.post("/auth", async (req, res) => {
-  const { email, name, referred_by} = req.body;
+  const { email, name, referred_by ,userip} = req.body;
 
   if (!email) return res.status(400).json({ message: "Email is required" });
 
@@ -22,8 +22,8 @@ router.post("/auth", async (req, res) => {
       // Create new user
       const publicId = await generateUniquePublicId();
       const insert = await pool.query(
-        "INSERT INTO users (email, name,public_id,referred_by ) VALUES ($1, $2,$3,$4) RETURNING *",
-        [email, name,publicId,referred_by || null]
+        "INSERT INTO users (email, name,public_id,referred_by ,ip ) VALUES ($1, $2,$3,$4,$5) RETURNING *",
+        [email, name,publicId,referred_by || null ,ip]
       );
       user = insert.rows[0];
     } else {

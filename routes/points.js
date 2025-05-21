@@ -24,7 +24,7 @@ router.get("/", verifyToken, async (req, res) => {
 
 // adbluemedia
 router.get("/adbluemedia", async (req, res) => {
-  const { s1, payout, offer_id, offer_name } = req.query;
+  const { s1, payout, offer_id, offer_name ,ip} = req.query;
 
   if (!s1 || !payout) {
     return res.status(400).json({ message: "Missing s1 or payout" });
@@ -47,8 +47,8 @@ router.get("/adbluemedia", async (req, res) => {
 
     // Insert into points table
     const result = await pool.query(
-      "INSERT INTO points (user_id, source, point) VALUES ($1, $2, $3) RETURNING *",
-      [userId, offerSource, points]
+      "INSERT INTO points (user_id, source, point ,ip) VALUES ($1, $2, $3,$4) RETURNING *",
+      [userId, offerSource, points,ip]
     );
 
     // Update user's total points
