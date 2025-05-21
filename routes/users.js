@@ -7,7 +7,7 @@ const verifyToken = require("../middlewares/auth");
 const generateUniquePublicId = require("../utils/generatePublicId");
 // POST /api/auth
 router.post("/auth", async (req, res) => {
-  const { email, name, referred_by ,userip} = req.body;
+  const { email, name, referred_by ,ip} = req.body;
 
   if (!email) return res.status(400).json({ message: "Email is required" });
 
