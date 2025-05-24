@@ -108,40 +108,40 @@ router.get("/cpagrip", async (req, res) => {
 
 // adbluemedia
 router.get("/MmWall", async (req, res) => {
-  // const { s1, payout, offer_id, offer_name ,ip} = req.query;
+  const { user_id,payout, offername ,user_ip} = req.query;
 
-  // if (!s1 || !payout) {
-  //   return res.status(400).json({ message: "Missing s1 or payout" });
-  // }
+  if (!s1 || !payout) {
+    return res.status(400).json({ message: "Missing s1 or payout" });
+  }
 
   try {
-    // // Lookup user by public_id
-    // const userResult = await pool.query(
-    //   "SELECT id FROM users WHERE public_id = $1",
-    //   [s1]
-    // );
+    // Lookup user by public_id
+    const userResult = await pool.query(
+      "SELECT id FROM users WHERE public_id = $1",
+      [user_id]
+    );
 
-    // if (userResult.rows.length === 0) {
-    //   return res.status(404).json({ message: "User not found" });
-    // }
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    // const userId = userResult.rows[0].id;
-    // const points = Math.round(parseFloat(payout) * 0.4 * 1000); // Adjust conversion
-    // const offerSource = offer_name || "AdblueMedia"; // Default to CPAGrip if not passed
+    const userId = userResult.rows[0].id;
+    const points = Math.round(parseFloat(payout) * 0.4 * 1000); // Adjust conversion
+    const offerSource = offername || "MM wall"; // Default to CPAGrip if not passed
 
-    // // Insert into points table
-    // const result = await pool.query(
-    //   "INSERT INTO points (user_id, source, point ,ip) VALUES ($1, $2, $3,$4) RETURNING *",
-    //   [userId, offerSource, points,ip]
-    // );
+    // Insert into points table
+    const result = await pool.query(
+      "INSERT INTO points (user_id, source, point ,ip) VALUES ($1, $2, $3,$4) RETURNING *",
+      [userId, offerSource, points,user_ip]
+    );
 
-    // // Update user's total points
-    // await pool.query(
-    //   "UPDATE users SET points = points + $1 WHERE id = $2",
-    //   [points, userId]
-    // );
+    // Update user's total points
+    await pool.query(
+      "UPDATE users SET points = points + $1 WHERE id = $2",
+      [points, userId]
+    );
 
-    // res.status(200).json({ message: "Postback processed", data: result.rows[0] });
+    res.status(200).json({ message: "Postback processed", data: result.rows[0] });
   } catch (err) {
     console.error("Postback error:", err);
     res.status(500).json({ message: "Server error" });
