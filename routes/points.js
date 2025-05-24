@@ -152,7 +152,7 @@ router.get("/MmWall", async (req, res) => {
 router.get("/AyetStudios", async (req, res) => {
   const {external_identifier,payout_usd, offer_name ,ip} = req.query;
 
-  if (!external_identifier || !payout) {
+  if (!external_identifier || !payout_usd) {
     return res.status(400).json({ message: "Missing s1 or payout" });
   }
 
