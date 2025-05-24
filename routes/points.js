@@ -108,9 +108,9 @@ router.get("/cpagrip", async (req, res) => {
 
 // MmWall
 router.get("/MmWall", async (req, res) => {
-  const { user_id,payout, offername ,user_ip} = req.query;
+  const { user_id,payout,offername ,user_ip} = req.query;
 
-  if (!s1 || !payout) {
+  if (!user_id || !payout) {
     return res.status(400).json({ message: "Missing s1 or payout" });
   }
 
@@ -150,9 +150,9 @@ router.get("/MmWall", async (req, res) => {
 
 // AyeT-studios
 router.get("/AyetStudios", async (req, res) => {
-  const { external_identifier,payout_usd, offer_name ,ip} = req.query;
+  const {external_identifier,payout_usd, offer_name ,ip} = req.query;
 
-  if (!s1 || !payout) {
+  if (!external_identifier || !payout) {
     return res.status(400).json({ message: "Missing s1 or payout" });
   }
 
