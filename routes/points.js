@@ -202,7 +202,7 @@ router.get("/Adgem", async (req, res) => {
     // Lookup user by public_id
     const userResult = await pool.query(
       "SELECT id FROM users WHERE public_id = $1",
-      [external_identifier]
+      [player_id]
     );
 
     if (userResult.rows.length === 0) {
