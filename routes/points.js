@@ -315,4 +315,45 @@ router.get("/Mylead", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+// MyChips
+router.get("/Mychips", async (req, res) => {
+  const {player_id,payout, offer_name ,ip} = req.query;
+
+  if (!player_id || !payout) {
+    return res.status(400).json({ message: "Missing s1 or payout" });
+  }
+
+  try {
+    // Lookup user by public_id
+    const userResult = await pool.query(
+      "SELECT id FROM users WHERE public_id = $1",
+      [player_id]
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userId = userResult.rows[0].id;
+    const points = Math.round(parseFloat(payout) * 0.4 * 1000); // Adjust conversion
+    const offerSource = offer_name || "MyChips"; 
+
+    // Insert into points table
+    const result = await pool.query(
+      "INSERT INTO points (user_id, source, point ,ip) VALUES ($1, $2, $3,$4) RETURNING *",
+      [userId, offerSource, points,ip]
+    );
+
+    // Update user's total points
+    await pool.query(
+      "UPDATE users SET points = points + $1 WHERE id = $2",
+      [points, userId]
+    );
+
+    res.status(200).json({ message: "Postback processed", data: result.rows[0] });
+  } catch (err) {
+    console.error("Postback error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 module.exports = router;
