@@ -16,6 +16,9 @@ app.use('/api/points', pointsRoutes);
 const withdrawalRoutes = require("./routes/withdrawals");
 app.use("/api/withdrawals", withdrawalRoutes);
 
+const withdrawalRoutes = require("./routes/adscendMediaOfferWall");
+app.use("/api/adcenOffers", withdrawalRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
