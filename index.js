@@ -16,8 +16,8 @@ app.use('/api/points', pointsRoutes);
 const withdrawalRoutes = require("./routes/withdrawals");
 app.use("/api/withdrawals", withdrawalRoutes);
 
-const withdrawalRoutes = require("./routes/adscendMediaOfferWall");
-app.use("/api/adcenOffers", withdrawalRoutes);
+const adscendmediaRoutes = require("./routes/adscendMediaOfferWall");
+app.use("/api/adcenOffers", adscendmediaRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
