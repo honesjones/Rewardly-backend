@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -22,11 +24,13 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
+const https = require('https'); // Use https instead of http
+
 // Keep-alive task
 function keepAlive() {
   console.log(`Keep-alive task ran at ${new Date().toISOString()}`);
   // Ping internal health endpoint
-  http.get('https://rewardly-backend.onrender.com/health', (res) => {
+  https.get('https://rewardly-backend.onrender.com/health', (res) => {
     console.log(`Health check status: ${res.statusCode}`);
   }).on('error', (err) => {
     console.error('Health check failed:', err.message);
